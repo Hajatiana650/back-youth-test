@@ -11,21 +11,149 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
+
+// ================= ENUMS =================
+
+enum StatutTache {
+  EN_ATTENTE
+  EN_COURS
+  TERMINE
+  INACHEVE
+}
+
+enum Priorite {
+  BASSE
+  MOYENNE
+  HAUTE
+}
+
+enum TypeValidation {
+  CALCUL
+  QUIZ
+  JEU
+}
+
+enum StatutCollaboration {
+  ACTIVE
+  TERMINEE
+  ANNULEE
+}
+
+// ================= MODELS =================
 
 model User {
-  id    Int     @default(autoincrement()) @id
-  email String  @unique
-  name  String?
-  posts Post[]
+  id            Int           @id @default(autoincrement())
+  nom           String
+  email         String        @unique
+  mdp           String
+
+  reveils       Reveil[]
+  taches        Tache[]
+  progressions  Progression[]
+  collaborationsCreees Collaboration[] @relation("CreateurCollab")
+
+  participations Participation[]
+  actualites     Actualite[] @relation("AuteurActualite")
 }
 
-model Post {
-  id        Int      @default(autoincrement()) @id
-  title     String
-  content   String?
-  published Boolean? @default(false)
-  author    User?    @relation(fields: [authorId], references: [id])
-  authorId  Int?
+// ================= REVEIL =================
+
+model Reveil {
+  id                     Int              @id @default(autoincrement())
+  heure_reveil           DateTime
+  jour_actif             String           // ex: "LUNDI,MARDI"
+  niveau_de_difficulte   Int
+  type_de_validation     TypeValidation
+  duree_limit_son        Int
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+}
+
+// ================= TACHE =================
+
+model Tache {
+  id              Int          @id @default(autoincrement())
+  titre           String
+  description     String
+  date_prevu      DateTime
+  debut_prevu     DateTime
+  fin_prevu       DateTime
+  statut          StatutTache
+  priorite        Priorite
+
+  userId      Int
+  categorieId Int
+
+  user       User      @relation(fields: [userId], references: [id])
+  categorie  Categorie @relation(fields: [categorieId], references: [id])
+
+  participations Participation[]
+}
+
+// ================= CATEGORIE =================
+
+model Categorie {
+  id            Int     @id @default(autoincrement())
+  nom_categorie String
+  description   String?
+
+  taches     Tache[]
+  actualites Actualite[]
+}
+
+// ================= PROGRESSION =================
+
+model Progression {
+  id                  Int      @id @default(autoincrement())
+  point               Int
+  taux_achevement     Float
+  taux_ponctualite    Float
+  periode             String   // ex: "2026-04"
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+}
+
+// ================= COLLABORATION =================
+
+model Collaboration {
+  id         Int                   @id @default(autoincrement())
+  nom_collab String
+  statut     StatutCollaboration
+
+  creeParId Int
+  createur  User @relation("CreateurCollab", fields: [creeParId], references: [id])
+
+  participations Participation[]
+}
+
+// ================= PARTICIPATION (relation N-N) =================
+
+model Participation {
+  id Int @id @default(autoincrement())
+
+  userId           Int
+  collaborationId  Int
+  tacheId          Int?
+
+  user          User          @relation(fields: [userId], references: [id])
+  collaboration Collaboration @relation(fields: [collaborationId], references: [id])
+  tache         Tache?        @relation(fields: [tacheId], references: [id])
+}
+
+// ================= ACTUALITE =================
+
+model Actualite {
+  id          Int     @id @default(autoincrement())
+  titre       String
+  description String
+  contenu     String
+
+  suggereParId Int
+  categorieId  Int
+
+  auteur     User      @relation("AuteurActualite", fields: [suggereParId], references: [id])
+  categorie  Categorie @relation(fields: [categorieId], references: [id])
 }

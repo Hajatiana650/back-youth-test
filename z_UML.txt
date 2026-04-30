@@ -1,0 +1,61 @@
+user {
+    nom
+    email
+    mdp
+}
+
+reveil {
+    heure_reveil
+    jour_actif
+    niveau_de_difficulté
+    type_de_validation (calcul, quizz, jeux)
+    durée_limit_son
+}
+
+tache {
+    titre
+    description
+    date_prevu
+    debut_prevu
+    fin_prevu
+    statut (en cours, en attente, terminé, inachevé)
+    priorité
+    id_user
+    id_categorie
+}
+
+categorie {
+    nom_categorie
+    description?
+}
+
+progression {
+    point
+    taux_achevement
+    taux_ponctualite
+    periode
+    id_user
+}
+
+collaboration {
+    nom_collab
+    cree_par (id_user)
+    statut
+}
+
+actualite {
+    titre
+    description
+    suggere_par
+    contenu
+}
+
+RG1: 1 user configure 1 ou plusieur réveil
+RG2: 1 user effectue 1 à plusieur tâches
+RG3: 1 tache correspond à une categorie
+RG4: 1 tache correspond à une categorie
+RG5: 1 user peut créer une collaboration
+RG6: 1 tache peut figurer dans les collaborations
+RG7: 1 progression concerne un user sur une période
+RG8: 1  actualité correspond à une catégorie
+RG9: 1 collaboration peut avoir plusieurs users
