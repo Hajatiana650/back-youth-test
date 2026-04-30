@@ -28,6 +28,12 @@ enum Priorite {
   HAUTE
 }
 
+enum Difficulte {
+  FACILE
+  MOYENNE
+  DIFFICILE
+}
+
 enum TypeValidation {
   CALCUL
   QUIZ
@@ -63,7 +69,7 @@ model Reveil {
   id                     Int              @id @default(autoincrement())
   heure_reveil           DateTime
   jour_actif             String           // ex: "LUNDI,MARDI"
-  niveau_de_difficulte   Int
+  niveau_de_difficulte   Difficulte
   type_de_validation     TypeValidation
   duree_limit_son        Int
 
