@@ -1,6 +1,8 @@
-import { Controller, Get, Logger } from '@nestjs/common';
+import { Controller, Get, Body, Post, Logger } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { Prisma } from 'generated/prisma/client';
+import { CreateUserDto } from './dto/create-user.dto';
 
 @Controller('users')
 export class UsersController {
@@ -21,6 +23,12 @@ export class UsersController {
       this.logger.error('Error fetching users:', error);
       throw error;
     }
+  }
+
+  @Post()
+  @ApiOperation({ summary: 'Créer un utilisateur' })
+  create(@Body() dto: CreateUserDto) {
+    return this.usersService.createUser(dto);
   }
 
 }

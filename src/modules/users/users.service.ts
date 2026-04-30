@@ -17,4 +17,8 @@ export class UsersService extends CrudService<
   async getAllUsers(){
     return super.findAll();
   }
+
+  async createUser(data: Prisma.UserCreateInput){
+    return super.create(data);
+  }
 }
