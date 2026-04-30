@@ -5,9 +5,10 @@ import { UsersModule } from './modules/users/users.module';
 import { ReveilModule } from './modules/reveil/reveil.module';
 import { TacheModule } from './modules/taches/taches.module';
 import { CategorieModule } from './modules/categorie/categorie.module';
+import { ProgressionModule } from './modules/progression/progression.module';
 
 @Module({
-  imports: [UsersModule, ReveilModule, TacheModule, CategorieModule],
+  imports: [UsersModule, ReveilModule, TacheModule, CategorieModule, ProgressionModule],
   controllers: [AppController],
   providers: [AppService],
 })
