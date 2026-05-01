@@ -7,7 +7,8 @@ import { TacheModule } from './modules/taches/taches.module';
 import { CategorieModule } from './modules/categorie/categorie.module';
 import { ProgressionModule } from './modules/progression/progression.module';
 import { CollaborationModule } from './modules/collaboration/collaboration.module';
-
+import { ParticipationModule } from './modules/participation/participation.module';
+import { ActualiteModule } from './modules/actualite/actualite.module';
 @Module({
   imports: [
     UsersModule,
@@ -16,6 +17,8 @@ import { CollaborationModule } from './modules/collaboration/collaboration.modul
     CategorieModule,
     ProgressionModule,
     CollaborationModule,
+    ParticipationModule,
+    ActualiteModule
   ],
   controllers: [AppController],
   providers: [AppService],
